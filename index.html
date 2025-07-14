@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>席位卡打印系统</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #f0f2f5;
+            padding: 20px;
+            color: #333;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #1890ff;
+        }
+        
+        h1 {
+            color: #1890ff;
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-section {
+            padding: 20px;
+            background: #fff;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            resize: vertical;
+        }
+        
+        .tip {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        button:hover {
+            background: #40a9ff;
+            transform: translateY(-2px);
+        }
+        
+        #previewBtn {
+            background: #13c2c2;
+        }
+        
+        #previewBtn:hover {
+            background: #36cfc9;
+        }
+        
+        .preview-section {
+            padding: 20px;
+            flex: 1;
+            display: none;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            flex-direction: column;
+        }
+        
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .back-btn {
+            background: #f5222d;
+            max-width: 150px;
+        }
+        
+        .back-btn:hover {
+            background: #ff4d4f;
+        }
+        
+        .page-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+        }
+        
+        .page-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .name-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 99mm;
+            border-bottom: 1px dashed #ccc;
+            font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif;
+            padding: 0 3.5cm;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        .name-text {
+            display: inline-block;
+            width: 100%;
+            text-align: justify;
+            text-align-last: justify;
+            letter-spacing: 0;
+            word-spacing: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif;
+        }
+        
+        .page-footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            
+            .input-section, .back-btn, .page-footer, header, .preview-controls {
+                display: none !important;
+            }
+            
+            .preview-section {
+                display: block !important;
+                padding: 0;
+                background: transparent;
+                border: none;
+            }
+            
+            .page {
+                box-shadow: none !important;
+                margin: 0 !important;
+                height: 297mm !important;
+                width: 210mm !important;
+                page-break-after: always !important;
+            }
+            
+            .page-container {
+                gap: 0 !important;
+                padding: 0;
+                margin: 0;
+            }
+            
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            
+            .name-card {
+                border-bottom: 1px dashed #000 !important;
+                height: 99mm !important;
+                padding: 0 3.5cm !important;
+                font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif !important;
+            }
+            
+            .name-text {
+                font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif !important;
+                text-align: justify !important;
+                text-align-last: justify !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+            }
+        }
+    </style>
+    
+    <!-- 方正大标宋GBK字体CDN -->
+    <style>
+        @font-face {
+            font-family: 'FZDBSK';
+            font-style: normal;
+            font-weight: normal;
+            src: url('https://cdn.jsdelivr.net/gh/lxgw/kose-font@main/FZDBSK.TTF') format('truetype');
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>席位卡打印系统</h1>
+            <p>输入姓名，一键生成打印席位卡</p>
+        </header>
+        
+        <section class="input-section">
+            <div class="form-group">
+                <label for="nameInput">请输入姓名（用逗号、顿号或空格分隔）：</label>
+                <textarea id="nameInput" placeholder="例如：张三,李四、王五 赵六">张三、李四、王五、李明、王小明、李雷</textarea>
+                <p class="tip">提示：系统会自动识别逗号、顿号、空格等分隔符</p>
+            </div>
+            
+            <div class="actions">
+                <button id="previewBtn">预览席位卡</button>
+                <button id="printBtn">打印席位卡</button>
+            </div>
+        </section>
+        
+        <section class="preview-section" id="previewSection">
+            <div class="preview-controls">
+                <button class="back-btn" id="backBtn">返回修改</button>
+            </div>
+            <div class="page-container" id="pageContainer"></div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('nameInput');
+            const previewBtn = document.getElementById('previewBtn');
+            const printBtn = document.getElementById('printBtn');
+            const backBtn = document.getElementById('backBtn');
+            const previewSection = document.getElementById('previewSection');
+            const pageContainer = document.getElementById('pageContainer');
+            
+            // 分割姓名
+            function parseNames(input) {
+                const regex = /[,，、\s]+/;
+                return input.split(regex)
+                    .map(name => name.trim())
+                    .filter(name => name !== '');
+            }
+            
+            // 生成席位卡页面
+            function generateCards() {
+                const names = parseNames(nameInput.value);
+                if (names.length === 0) {
+                    alert('请输入至少一个姓名');
+                    return false;
+                }
+                
+                pageContainer.innerHTML = '';
+                
+                // 为每组三个名字生成两页（正反面完全相同的页面）
+                const groupCount = Math.ceil(names.length / 3);
+                
+                for (let groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+                    const groupNames = names.slice(groupIndex * 3, (groupIndex * 3) + 3);
+                    
+                    // 创建正面（与反面完全相同）
+                    createPage(groupNames, groupIndex + 1);
+                    
+                    // 创建反面（与正面完全相同）
+                    createPage(groupNames, groupIndex + 1);
+                }
+                
+                // 自动调整长名字的字体大小和间距
+                setTimeout(adjustTextStyles, 100);
+                
+                return true;
+            }
+            
+            // 创建单个页面
+            function createPage(names, groupIndex) {
+                const page = document.createElement('div');
+                page.className = 'page';
+                
+                let cardsHTML = '';
+                
+                // 每页固定三个名字区域
+                for (let j = 0; j < 3; j++) {
+                    const name = names[j] || '';
+                    cardsHTML += `
+                        <div class="name-card" data-name="${name}">
+                            <div class="name-text">${name}</div>
+                        </div>
+                    `;
+                }
+                
+                page.innerHTML = `
+                    <div class="page-content">
+                        ${cardsHTML}
+                    </div>
+                    <div class="page-footer">
+                        组${groupIndex} - 席位卡
+                    </div>
+                `;
+                
+                pageContainer.appendChild(page);
+            }
+            
+            // 调整长名字的字体大小和字符间距
+            function adjustTextStyles() {
+                const nameCards = document.querySelectorAll('.name-card');
+                
+                nameCards.forEach(card => {
+                    const name = card.dataset.name;
+                    if (!name) return;
+                    
+                    const nameText = card.querySelector('.name-text');
+                    const length = name.length;
+                    
+                    // 字体大小映射表
+                    const fontSizeMap = {
+                        1: 120,
+                        2: 120,
+                        3: 120,
+                        4: 95,   // 减小字体大小
+                        5: 85,   // 减小字体大小
+                        6: 75,   // 减小字体大小
+                        7: 65,   // 减小字体大小
+                        8: 55,   // 减小字体大小
+                        9: 50,   // 减小字体大小
+                        10: 45   // 减小字体大小
+                    };
+                    
+                    // 字符间距映射表（针对4字及以上名字）
+                    const letterSpacingMap = {
+                        4: -0.15,  // 增加负间距
+                        5: -0.20,  // 增加负间距
+                        6: -0.25,  // 增加负间距
+                        7: -0.30,  // 增加负间距
+                        8: -0.35,  // 增加负间距
+                        9: -0.40,  // 增加负间距
+                        10: -0.45  // 增加负间距
+                    };
+                    
+                    // 设置字体大小
+                    const fontSize = fontSizeMap[Math.min(length, 10)] || 40;
+                    nameText.style.fontSize = `${fontSize}pt`;
+                    
+                    // 针对4字及以上名字调整字符间距
+                    if (length >= 4) {
+                        const spacing = letterSpacingMap[Math.min(length, 10)] || -0.5;
+                        nameText.style.letterSpacing = `${spacing}em`;
+                    }
+                    
+                    // 针对长名字增加左右内边距
+                    if (length > 4) {
+                        nameText.style.padding = '0 0.5cm';
+                    }
+                });
+            }
+            
+            // 预览席位卡
+            previewBtn.addEventListener('click', function() {
+                if (generateCards()) {
+                    previewSection.style.display = 'flex';
+                }
+            });
+            
+            // 直接打印
+            printBtn.addEventListener('click', function() {
+                if (generateCards()) {
+                    setTimeout(() => {
+                        previewSection.style.display = 'flex';
+                        setTimeout(() => {
+                            window.print();
+                        }, 100);
+                    }, 100);
+                }
+            });
+            
+            // 返回修改
+            backBtn.addEventListener('click', function() {
+                previewSection.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
