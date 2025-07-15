@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>席位卡打印系统</title>
+    <title>贵冶厂办席位卡打印系统</title>
     <style>
         * {
             box-sizing: border-box;
@@ -16,7 +16,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: #f0f2f5;
+            background: linear-gradient(135deg, #1a3a5f 0%, #2c5a8a 100%);
             padding: 20px;
             color: #333;
         }
@@ -24,21 +24,60 @@
         header {
             text-align: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #1890ff;
+            padding: 20px 0;
+            color: white;
         }
         
         h1 {
-            color: #1890ff;
+            color: #ffd700;
             margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .print-tip {
+            background: #ffeb3b;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px auto;
+            max-width: 800px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ff9800;
+        }
+        
+        .print-tip strong {
+            color: #e53935;
+            font-size: 1.2em;
+        }
+        
+        .font-tip {
+            background: #4fc3f7;
+            color: #01579b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px auto;
+            max-width: 800px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #0288d1;
+        }
+        
+        .font-tip a {
+            color: #01579b;
+            text-decoration: underline;
+            font-weight: bold;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             flex: 1;
             display: flex;
@@ -46,93 +85,115 @@
         }
         
         .input-section {
-            padding: 20px;
-            background: #fff;
+            padding: 25px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
-            color: #555;
+            color: #2c3e50;
+            font-size: 18px;
         }
         
         textarea {
             width: 100%;
-            min-height: 150px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            min-height: 180px;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
             font-size: 16px;
             resize: vertical;
         }
         
         .tip {
             font-size: 14px;
-            color: #888;
-            margin-top: 5px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+        
+        .counter {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 5px;
         }
         
         .actions {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
+            margin-top: 15px;
         }
         
         button {
-            padding: 12px 24px;
-            background: #1890ff;
+            padding: 14px 28px;
+            background: #3498db;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             transition: all 0.3s;
             flex: 1;
-            max-width: 200px;
+            max-width: 220px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
-            background: #40a9ff;
-            transform: translateY(-2px);
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(1px);
         }
         
         #previewBtn {
-            background: #13c2c2;
+            background: #27ae60;
         }
         
         #previewBtn:hover {
-            background: #36cfc9;
+            background: #219653;
         }
         
         .preview-section {
-            padding: 20px;
+            padding: 25px;
             flex: 1;
             display: none;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
+            background: #f1f5f9;
             flex-direction: column;
         }
         
         .preview-controls {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
         
         .back-btn {
-            background: #f5222d;
-            max-width: 150px;
+            background: #e74c3c;
+            max-width: 180px;
         }
         
         .back-btn:hover {
-            background: #ff4d4f;
+            background: #c0392b;
         }
         
         .page-container {
@@ -140,18 +201,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 25px;
+            padding: 15px;
+            background: #e8edf3;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
         .page {
             width: 210mm;
             height: 297mm;
             background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             position: relative;
             display: flex;
             flex-direction: column;
             page-break-after: always;
+            border: 1px solid #bdc3c7;
         }
         
         .page-content {
@@ -165,9 +231,9 @@
             justify-content: center;
             align-items: center;
             height: 99mm;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 2px dashed #95a5a6;
             font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif;
-            padding: 0 3.5cm;
+            padding: 0 4cm;
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -186,9 +252,25 @@
         
         .page-footer {
             text-align: center;
-            padding: 10px;
-            font-size: 12px;
-            color: #666;
+            padding: 15px;
+            font-size: 14px;
+            color: #7f8c8d;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .stats {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #2c3e50;
+            border: 1px solid #3498db;
+        }
+        
+        .stats strong {
+            color: #e74c3c;
         }
         
         @media print {
@@ -197,7 +279,7 @@
                 padding: 0 !important;
             }
             
-            .input-section, .back-btn, .page-footer, header, .preview-controls {
+            .input-section, .back-btn, .page-footer, header, .preview-controls, .stats, .print-tip, .font-tip {
                 display: none !important;
             }
             
@@ -214,12 +296,15 @@
                 height: 297mm !important;
                 width: 210mm !important;
                 page-break-after: always !important;
+                border: none !important;
             }
             
             .page-container {
                 gap: 0 !important;
                 padding: 0;
                 margin: 0;
+                background: transparent !important;
+                box-shadow: none !important;
             }
             
             @page {
@@ -228,10 +313,9 @@
             }
             
             .name-card {
-                border-bottom: 1px dashed #000 !important;
+                border-bottom: 2px dashed #000 !important;
                 height: 99mm !important;
-                padding: 0 3.5cm !important;
-                font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif !important;
+                padding: 0 4cm !important;
             }
             
             .name-text {
@@ -239,7 +323,6 @@
                 text-align: justify !important;
                 text-align-last: justify !important;
                 white-space: nowrap !important;
-                overflow: hidden !important;
             }
         }
     </style>
@@ -255,29 +338,79 @@
     </style>
 </head>
 <body>
+    <header>
+        <h1>贵冶厂办席位卡打印系统</h1>
+        <p class="subtitle">输入参会人员姓名，一键生成打印席位卡</p>
+    </header>
+    
+    <div class="print-tip">
+        <strong>打印设置提醒：</strong> 请选择<strong>双面打印 - 长边翻页</strong>以确保席位卡正反面正确对齐
+    </div>
+    
+    <div class="font-tip">
+        <strong>字体安装提醒：</strong> 为获得最佳打印效果，请安装<strong>方正大标宋_GBK</strong>字体
+        <div style="margin-top: 10px; font-size: 14px;">
+            <a href="https://www.foundertype.com/index.php/FindFont/search.html?keyword=大标宋" target="_blank">官方下载链接</a> | 
+            <a href="https://www.fonts.net.cn/font-36839823658.html" target="_blank">字体网下载</a>
+        </div>
+    </div>
+    
     <div class="container">
-        <header>
-            <h1>席位卡打印系统</h1>
-            <p>输入姓名，一键生成打印席位卡</p>
-        </header>
-        
         <section class="input-section">
             <div class="form-group">
-                <label for="nameInput">请输入姓名（用逗号、顿号或空格分隔）：</label>
-                <textarea id="nameInput" placeholder="例如：张三,李四、王五 赵六">张三、李四、王五、李明、王小明、李雷</textarea>
-                <p class="tip">提示：系统会自动识别逗号、顿号、空格等分隔符</p>
+                <label for="nameInput">请输入姓名（用逗号、顿号或空格分隔）：<span class="counter" id="nameCounter">0</span></label>
+                <textarea id="nameInput" placeholder="例如：张三,李四、王五 赵六">张三,李四,王五,李明,王小明,李雷,张伟,刘洋,陈晓,杨帆</textarea>
+                <p class="tip">提示：系统会自动识别逗号、顿号、空格等分隔符，并自动统计姓名个数</p>
+            </div>
+            
+            <div class="stats">
+                已输入 <strong id="nameCount">0</strong> 个姓名，将生成 <strong id="sheetCount">0</strong> 张A4纸（共 <strong id="pageCount">0</strong> 页）
             </div>
             
             <div class="actions">
-                <button id="previewBtn">预览席位卡</button>
-                <button id="printBtn">打印席位卡</button>
+                <button id="previewBtn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                    </svg>
+                    预览席位卡
+                </button>
+                <button id="printBtn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+                    </svg>
+                    打印席位卡
+                </button>
             </div>
         </section>
         
         <section class="preview-section" id="previewSection">
             <div class="preview-controls">
-                <button class="back-btn" id="backBtn">返回修改</button>
+                <button class="back-btn" id="backBtn">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    返回修改
+                </button>
             </div>
+            
+            <div class="print-tip">
+                <strong>打印设置提醒：</strong> 请选择<strong>双面打印 - 长边翻页</strong>以确保席位卡正反面正确对齐
+            </div>
+            
+            <div class="font-tip">
+                <strong>字体安装提醒：</strong> 为获得最佳打印效果，请安装<strong>方正大标宋_GBK</strong>字体
+                <div style="margin-top: 10px; font-size: 14px;">
+                    <a href="https://www.foundertype.com/index.php/FindFont/search.html?keyword=大标宋" target="_blank">官方下载链接</a> | 
+                    <a href="https://www.fonts.net.cn/font-36839823658.html" target="_blank">字体网下载</a>
+                </div>
+            </div>
+            
+            <div class="stats">
+                当前预览：共 <strong id="previewNameCount">0</strong> 个姓名，生成 <strong id="previewSheetCount">0</strong> 张A4纸（共 <strong id="previewPageCount">0</strong> 页）
+            </div>
+            
             <div class="page-container" id="pageContainer"></div>
         </section>
     </div>
@@ -290,6 +423,33 @@
             const backBtn = document.getElementById('backBtn');
             const previewSection = document.getElementById('previewSection');
             const pageContainer = document.getElementById('pageContainer');
+            const nameCounter = document.getElementById('nameCounter');
+            const nameCount = document.getElementById('nameCount');
+            const sheetCount = document.getElementById('sheetCount');
+            const pageCount = document.getElementById('pageCount');
+            const previewNameCount = document.getElementById('previewNameCount');
+            const previewSheetCount = document.getElementById('previewSheetCount');
+            const previewPageCount = document.getElementById('previewPageCount');
+            
+            // 更新名字统计
+            function updateNameStats() {
+                const names = parseNames(nameInput.value);
+                const count = names.length;
+                const groups = Math.ceil(count / 3);
+                const sheets = groups; // 纸张张数（每组名字对应一张纸）
+                const pages = groups * 2; // 总页数（每张纸有正反两页）
+                
+                nameCounter.textContent = count;
+                nameCount.textContent = count;
+                sheetCount.textContent = sheets;
+                pageCount.textContent = pages;
+                
+                if (previewSection.style.display === 'flex') {
+                    previewNameCount.textContent = count;
+                    previewSheetCount.textContent = sheets;
+                    previewPageCount.textContent = pages;
+                }
+            }
             
             // 分割姓名
             function parseNames(input) {
@@ -322,6 +482,11 @@
                     createPage(groupNames, groupIndex + 1);
                 }
                 
+                // 更新预览统计
+                previewNameCount.textContent = names.length;
+                previewSheetCount.textContent = groupCount; // 纸张张数
+                previewPageCount.textContent = groupCount * 2; // 总页数
+                
                 // 自动调整长名字的字体大小和间距
                 setTimeout(adjustTextStyles, 100);
                 
@@ -350,7 +515,7 @@
                         ${cardsHTML}
                     </div>
                     <div class="page-footer">
-                        组${groupIndex} - 席位卡
+                        第${groupIndex}组 - 贵冶厂办席位卡
                     </div>
                 `;
                 
@@ -373,24 +538,24 @@
                         1: 120,
                         2: 120,
                         3: 120,
-                        4: 95,   // 减小字体大小
-                        5: 85,   // 减小字体大小
-                        6: 75,   // 减小字体大小
-                        7: 65,   // 减小字体大小
-                        8: 55,   // 减小字体大小
-                        9: 50,   // 减小字体大小
-                        10: 45   // 减小字体大小
+                        4: 95,
+                        5: 85,
+                        6: 75,
+                        7: 65,
+                        8: 55,
+                        9: 50,
+                        10: 45
                     };
                     
                     // 字符间距映射表（针对4字及以上名字）
                     const letterSpacingMap = {
-                        4: -0.15,  // 增加负间距
-                        5: -0.20,  // 增加负间距
-                        6: -0.25,  // 增加负间距
-                        7: -0.30,  // 增加负间距
-                        8: -0.35,  // 增加负间距
-                        9: -0.40,  // 增加负间距
-                        10: -0.45  // 增加负间距
+                        4: -0.05,
+                        5: -0.08,
+                        6: -0.10,
+                        7: -0.12,
+                        8: -0.14,
+                        9: -0.16,
+                        10: -0.18
                     };
                     
                     // 设置字体大小
@@ -399,16 +564,22 @@
                     
                     // 针对4字及以上名字调整字符间距
                     if (length >= 4) {
-                        const spacing = letterSpacingMap[Math.min(length, 10)] || -0.5;
+                        const spacing = letterSpacingMap[Math.min(length, 10)] || -0.2;
                         nameText.style.letterSpacing = `${spacing}em`;
                     }
                     
-                    // 针对长名字增加左右内边距
+                    // 针对长名字添加内边距
                     if (length > 4) {
-                        nameText.style.padding = '0 0.5cm';
+                        card.style.padding = '0 3.5cm';
                     }
                 });
             }
+            
+            // 实时更新名字统计
+            nameInput.addEventListener('input', updateNameStats);
+            
+            // 初始化统计
+            updateNameStats();
             
             // 预览席位卡
             previewBtn.addEventListener('click', function() {
