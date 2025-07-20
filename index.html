@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -248,6 +249,9 @@
             white-space: nowrap;
             overflow: hidden;
             font-family: "FZDBSK", "方正大标宋_GBK", SimSun, serif;
+            color: #000;
+            /* 字体粗细优化 */
+            font-weight: normal;
         }
         
         .page-footer {
@@ -277,6 +281,8 @@
             body {
                 background: white !important;
                 padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             
             .input-section, .back-btn, .page-footer, header, .preview-controls, .stats, .print-tip, .font-tip {
@@ -315,7 +321,7 @@
             .name-card {
                 border-bottom: 2px dashed #000 !important;
                 height: 99mm !important;
-                padding: 0 4cm !important;
+                padding: 0 2.5cm !important;
             }
             
             .name-text {
@@ -323,6 +329,9 @@
                 text-align: justify !important;
                 text-align-last: justify !important;
                 white-space: nowrap !important;
+                color: #000 !important;
+                /* 打印字体粗细优化 */
+                font-weight: normal !important;
             }
         }
     </style>
@@ -371,7 +380,7 @@
                 <button id="previewBtn">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.极5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                     </svg>
                     预览席位卡
                 </button>
@@ -431,6 +440,14 @@
             const previewSheetCount = document.getElementById('previewSheetCount');
             const previewPageCount = document.getElementById('previewPageCount');
             
+            // 分割姓名
+            function parseNames(input) {
+                const regex = /[,，、\s]+/;
+                return input.split(regex)
+                    .map(name => name.trim())
+                    .filter(name => name !== '');
+            }
+            
             // 更新名字统计
             function updateNameStats() {
                 const names = parseNames(nameInput.value);
@@ -449,14 +466,6 @@
                     previewSheetCount.textContent = sheets;
                     previewPageCount.textContent = pages;
                 }
-            }
-            
-            // 分割姓名
-            function parseNames(input) {
-                const regex = /[,，、\s]+/;
-                return input.split(regex)
-                    .map(name => name.trim())
-                    .filter(name => name !== '');
             }
             
             // 生成席位卡页面
@@ -550,10 +559,10 @@
                     // 字符间距映射表（针对4字及以上名字）
                     const letterSpacingMap = {
                         4: -0.05,
-                        5: -0.08,
-                        6: -0.10,
-                        7: -0.12,
-                        8: -0.14,
+                        5: -0.05,
+                        6: -0.05,
+                        7: -0.05,
+                        8: -0.16,
                         9: -0.16,
                         10: -0.18
                     };
@@ -564,22 +573,16 @@
                     
                     // 针对4字及以上名字调整字符间距
                     if (length >= 4) {
-                        const spacing = letterSpacingMap[Math.min(length, 10)] || -0.2;
+                        const spacing = letterSpacingMap[Math.min(length, 10)] || -0.3;
                         nameText.style.letterSpacing = `${spacing}em`;
                     }
                     
                     // 针对长名字添加内边距
                     if (length > 4) {
-                        card.style.padding = '0 3.5cm';
+                        card.style.padding = '0 2.5cm';
                     }
                 });
             }
-            
-            // 实时更新名字统计
-            nameInput.addEventListener('input', updateNameStats);
-            
-            // 初始化统计
-            updateNameStats();
             
             // 预览席位卡
             previewBtn.addEventListener('click', function() {
@@ -604,6 +607,12 @@
             backBtn.addEventListener('click', function() {
                 previewSection.style.display = 'none';
             });
+            
+            // 实时更新名字统计
+            nameInput.addEventListener('input', updateNameStats);
+            
+            // 初始化统计
+            updateNameStats();
         });
     </script>
 </body>
